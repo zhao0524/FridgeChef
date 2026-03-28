@@ -28,6 +28,21 @@ body {
   to { transform: rotate(360deg); }
 }
 
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 h1, h2, h3 {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }

@@ -302,7 +302,7 @@ export default function App() {
                                 display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
                               }}
                             >
-                              {cartEmailState === "sent" ? "✓ Sent!" : cartEmailState === "sending" ? "Sending…" : "📧 Email my list"}
+                              {cartEmailState === "sent" ? "✓ Sent!" : cartEmailState === "sending" ? "Sending…" : <><MailIcon /> Email my list</>}
                             </button>
                           </div>
                         </>
@@ -400,7 +400,7 @@ export default function App() {
         )}
 
         {/* Main content */}
-        <main style={{ padding: "2rem 2.5rem 4rem" }}>
+        <main key={step} className="page-enter" style={{ padding: "2rem 2.5rem 4rem" }}>
           {step === "login" && <LoginView onLogin={login} />}
           {step === "upload" && (
             <HomePage
@@ -524,11 +524,7 @@ function LoginView({ onLogin }) {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "1rem", marginBottom: "2.5rem" }}>
           {features.map((f, i) => (
             <div key={i} className="clay-card" style={{ padding: "1.4rem 1.5rem" }}>
-              <div style={{
-                width: 40, height: 40, borderRadius: 12, marginBottom: "0.9rem",
-                background: i % 2 === 0 ? "linear-gradient(135deg, #FEE2E2, #FEF3C7)" : "linear-gradient(135deg, #FEF3C7, #FEE2E2)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
+              <div style={{ marginBottom: "0.9rem" }}>
                 {f.icon}
               </div>
               <p style={{ fontWeight: 700, fontSize: "0.9rem", color: "#1C0A00", marginBottom: "0.35rem" }}>{f.title}</p>
@@ -608,6 +604,10 @@ function LogoutIcon() {
       <line x1="21" y1="12" x2="9" y2="12" />
     </svg>
   );
+}
+
+function MailIcon() {
+  return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>;
 }
 
 function GoogleIcon() {

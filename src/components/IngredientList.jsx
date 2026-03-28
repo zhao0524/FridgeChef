@@ -27,13 +27,7 @@ export default function IngredientList({ ingredients, onUpdateIngredients, onCon
       <div className="clay-card" style={{ padding: "2rem" }}>
         <div style={{ marginBottom: "1.5rem" }}>
           <div className="flex items-center gap-3" style={{ marginBottom: "0.4rem" }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: 10,
-              background: "linear-gradient(135deg, #FEE2E2, #FEF3C7)",
-              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-            }}>
-              <LeafIcon />
-            </div>
+            <LeafIcon />
             <h2 style={{ color: "#450A0A", fontSize: "1.3rem", margin: 0 }}>Ingredients Found</h2>
           </div>
           <p style={{ color: "#92400E", fontSize: "0.875rem", marginTop: "0.25rem" }}>
@@ -129,7 +123,7 @@ export default function IngredientList({ ingredients, onUpdateIngredients, onCon
 
 function LeafIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M11 20A7 7 0 0118 7c-3 0-5.5.5-7 3-1.5 2.5-1 5.5 0 7l3-3" />
       <path d="M5 20c1.5-1.5 2.5-4 3-7" />
     </svg>

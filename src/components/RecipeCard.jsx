@@ -87,9 +87,7 @@ export default function RecipeCard({ recipe, onEmail, groceryList, onAddToGrocer
           {shoppingSuggestions.length > 0 && (
             <div className="clay-card" style={{ padding: "1.5rem" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-                <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #CA8A04, #FCD34D)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <StarIcon />
-                </div>
+                <StarIcon />
                 <h3 style={{ color: "#450A0A", fontSize: "0.95rem", margin: 0 }}>Wish List · What to Buy</h3>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
@@ -119,9 +117,7 @@ export default function RecipeCard({ recipe, onEmail, groceryList, onAddToGrocer
           <div className="clay-card" style={{ padding: "1.5rem" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
               <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #DC2626, #F87171)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <CartIcon white />
-                </div>
+                <CartIcon />
                 <h3 style={{ color: "#450A0A", fontSize: "0.95rem", margin: 0 }}>Grocery List</h3>
               </div>
               {groceryList.length > 0 && (
@@ -512,9 +508,9 @@ function LightbulbIcon() {
 function MailIcon() {
   return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>;
 }
-function CartIcon({ white }) {
+function CartIcon() {
   return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={white ? "white" : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
       <path d="M1 1h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.98-1.61L23 6H6"/>
     </svg>
@@ -523,7 +519,7 @@ function CartIcon({ white }) {
 
 function StarIcon() {
   return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   );

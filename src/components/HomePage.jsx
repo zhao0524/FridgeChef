@@ -70,13 +70,7 @@ export default function HomePage({ onUpload, loading, wishlist, setWishlist }) {
         {/* Upload card */}
         <div className="clay-card" style={{ padding: "1.75rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.25rem" }}>
-            <div style={{
-              width: 32, height: 32, borderRadius: 9,
-              background: "linear-gradient(135deg, #DC2626, #F87171)",
-              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-            }}>
-              <CameraIcon size={16} color="white" />
-            </div>
+            <CameraIcon size={22} color="#DC2626" />
             <div>
               <h2 style={{ color: "#450A0A", fontSize: "1rem", margin: 0 }}>Scan Your Fridge</h2>
               <p style={{ color: "#92400E", fontSize: "0.78rem", margin: 0 }}>Upload or drag a photo</p>
@@ -129,12 +123,12 @@ export default function HomePage({ onUpload, loading, wishlist, setWishlist }) {
             )}
           </div>
 
-          <input ref={inputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={e => handleFile(e.target.files[0])} disabled={loading} />
+          <input ref={inputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={e => handleFile(e.target.files[0])} onClick={e => { e.target.value = ""; }} disabled={loading} />
 
           {preview && !loading && (
             <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.85rem" }}>
               <button
-                onClick={() => { setPreview(null); setPendingFile(null); inputRef.current.click(); }}
+                onClick={() => { setPreview(null); setPendingFile(null); }}
                 className="clay-btn"
                 style={{ flex: 1, padding: "0.6rem", fontSize: "0.82rem", background: "white", color: "#DC2626", borderColor: "rgba(220,38,38,0.25)" }}
               >
@@ -155,13 +149,7 @@ export default function HomePage({ onUpload, loading, wishlist, setWishlist }) {
         {/* Wish List card */}
         <div className="clay-card" style={{ padding: "1.75rem" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.25rem" }}>
-            <div style={{
-              width: 32, height: 32, borderRadius: 9,
-              background: "linear-gradient(135deg, #CA8A04, #FCD34D)",
-              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-            }}>
-              <StarIcon />
-            </div>
+            <StarIcon />
             <div>
               <h2 style={{ color: "#450A0A", fontSize: "1rem", margin: 0 }}>Wish List</h2>
               <p style={{ color: "#92400E", fontSize: "0.78rem", margin: 0 }}>Dishes you'd love to make</p>
@@ -284,7 +272,7 @@ function CameraIcon({ size = 24, color = "#DC2626" }) {
 
 function StarIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#CA8A04" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   );
