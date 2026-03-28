@@ -5,7 +5,7 @@ import IngredientList from "./components/IngredientList";
 import RecipeCard from "./components/RecipeCard";
 import { detectIngredients, generateRecipe } from "./api/gemini";
 import { getAvailableTimeToday } from "./api/calendar";
-import { emailRecipe } from "./api/gmail";
+import { emailRecipe, emailGroceryList } from "./api/gmail";
 import { imageToBase64 } from "./utils/imageHelper";
 import { saveAccessToken, getAccessTokenFromSession } from "./utils/googleAuth";
 
@@ -40,6 +40,8 @@ export default function App() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartEmailState, setCartEmailState] = useState("idle");
   const [userEmail, setUserEmail] = useState(() => sessionStorage.getItem("fridgechef_email") || null);
 
   function saveStep(s) {
@@ -151,6 +153,19 @@ export default function App() {
     saveGroceryList(groceryList.filter(i => i.name !== name));
   }
 
+  async function handleCartEmail() {
+    if (!userEmail || !groceryList.length) return;
+    setCartEmailState("sending");
+    try {
+      await emailGroceryList(groceryList, userEmail);
+      setCartEmailState("sent");
+      setTimeout(() => setCartEmailState("idle"), 3000);
+    } catch {
+      setCartEmailState("idle");
+      alert("Failed to send email.");
+    }
+  }
+
   const stepIndex = STEP_KEYS.indexOf(step);
 
   return (
@@ -172,7 +187,7 @@ export default function App() {
           boxShadow: "0 1px 12px rgba(220,38,38,0.06)",
         }}>
           <div style={{
-            maxWidth: 860, margin: "0 auto", padding: "0 1.5rem",
+            padding: "0 2rem",
             height: 64, display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
@@ -197,6 +212,104 @@ export default function App() {
                     {userEmail}
                   </span>
                 )}
+
+                {/* Cart button */}
+                <div style={{ position: "relative" }}>
+                  <button
+                    onClick={() => setCartOpen(o => !o)}
+                    style={{
+                      position: "relative", display: "flex", alignItems: "center", justifyContent: "center",
+                      width: 38, height: 38, borderRadius: 10,
+                      background: cartOpen ? "#DC2626" : "rgba(220,38,38,0.08)",
+                      border: "1px solid rgba(220,38,38,0.2)",
+                      cursor: "pointer", transition: "all 0.2s ease",
+                      color: cartOpen ? "white" : "#DC2626",
+                    }}
+                  >
+                    <CartNavIcon />
+                    {groceryList.length > 0 && (
+                      <span style={{
+                        position: "absolute", top: -6, right: -6,
+                        width: 18, height: 18, borderRadius: "50%",
+                        background: "#DC2626", color: "white",
+                        fontSize: "0.65rem", fontWeight: 700,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        border: "2px solid white",
+                      }}>
+                        {groceryList.length}
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Dropdown */}
+                  {cartOpen && (
+                    <div style={{
+                      position: "absolute", top: "calc(100% + 10px)", right: 0,
+                      width: 300, borderRadius: 16,
+                      background: "white",
+                      boxShadow: "0 8px 32px rgba(220,38,38,0.15)",
+                      border: "1px solid rgba(220,38,38,0.12)",
+                      zIndex: 100, overflow: "hidden",
+                    }}>
+                      <div style={{ padding: "1rem 1.25rem 0.75rem", borderBottom: "1px solid rgba(220,38,38,0.08)" }}>
+                        <p style={{ fontWeight: 700, fontSize: "0.9rem", color: "#450A0A" }}>
+                          Grocery List {groceryList.length > 0 && <span style={{ color: "#DC2626" }}>({groceryList.length})</span>}
+                        </p>
+                      </div>
+
+                      {groceryList.length === 0 ? (
+                        <div style={{ padding: "1.5rem 1.25rem", textAlign: "center", color: "#92400E", fontSize: "0.82rem" }}>
+                          Your cart is empty
+                        </div>
+                      ) : (
+                        <>
+                          <div style={{ maxHeight: 260, overflowY: "auto", padding: "0.5rem 0" }}>
+                            {groceryList.map(item => (
+                              <div key={item.name} style={{
+                                display: "flex", alignItems: "center", gap: "0.75rem",
+                                padding: "0.5rem 1.25rem",
+                              }}>
+                                <input
+                                  type="checkbox"
+                                  checked={item.checked}
+                                  onChange={() => toggleGroceryItem(item.name)}
+                                  style={{ accentColor: "#DC2626", width: 15, height: 15, cursor: "pointer", flexShrink: 0 }}
+                                />
+                                <span style={{
+                                  fontSize: "0.85rem", color: item.checked ? "#9CA3AF" : "#450A0A",
+                                  textDecoration: item.checked ? "line-through" : "none", flex: 1,
+                                }}>
+                                  {item.name}
+                                </span>
+                                <button
+                                  onClick={() => removeGroceryItem(item.name)}
+                                  style={{ background: "none", border: "none", cursor: "pointer", color: "#FCA5A5", padding: 2, fontSize: "0.75rem" }}
+                                >✕</button>
+                              </div>
+                            ))}
+                          </div>
+                          <div style={{ padding: "0.75rem 1.25rem", borderTop: "1px solid rgba(220,38,38,0.08)" }}>
+                            <button
+                              onClick={handleCartEmail}
+                              disabled={!userEmail || cartEmailState !== "idle"}
+                              style={{
+                                width: "100%", padding: "0.65rem", borderRadius: 10,
+                                fontSize: "0.85rem", fontWeight: 700,
+                                background: cartEmailState === "sent" ? "#16A34A" : "#DC2626",
+                                color: "white", border: "none", cursor: userEmail ? "pointer" : "not-allowed",
+                                opacity: !userEmail ? 0.6 : 1,
+                                display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
+                              }}
+                            >
+                              {cartEmailState === "sent" ? "✓ Sent!" : cartEmailState === "sending" ? "Sending…" : "📧 Email my list"}
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+
                 <button
                   onClick={handleLogout}
                   style={{
@@ -286,7 +399,7 @@ export default function App() {
         )}
 
         {/* Main content */}
-        <main style={{ padding: "2rem 1.5rem 4rem" }}>
+        <main style={{ padding: "2rem 2.5rem 4rem" }}>
           {step === "login" && <LoginView onLogin={login} />}
           {step === "upload" && (
             <HomePage
@@ -475,6 +588,14 @@ function FridgeIcon({ large }) {
   );
 }
 
+function CartNavIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+      <path d="M1 1h4l2.68 13.39a2 2 0 001.98 1.61h9.72a2 2 0 001.98-1.61L23 6H6"/>
+    </svg>
+  );
+}
 function LogoutIcon() {
   return (
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">

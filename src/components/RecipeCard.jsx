@@ -31,7 +31,7 @@ export default function RecipeCard({ recipe, onEmail, groceryList, onAddToGrocer
   }
 
   return (
-    <div style={{ maxWidth: 860, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr", gap: "1.5rem" }}>
+    <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr", gap: "1.5rem" }}>
 
       {/* Top row: recipes + grocery list side by side on wide screens */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem", alignItems: "start" }}>
