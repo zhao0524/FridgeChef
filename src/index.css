@@ -1,1 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&family=Playfair+Display+SC:wght@400;700&display=swap');
 @import "tailwindcss";
+
+:root {
+  --color-primary: #DC2626;
+  --color-secondary: #F87171;
+  --color-cta: #CA8A04;
+  --color-bg: #FEF2F2;
+  --color-text: #450A0A;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Karla', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+h1, h2, h3 {
+  font-family: 'Playfair Display SC', serif;
+}
+
+.clay-card {
+  background: #fff;
+  border-radius: 20px;
+  border: 3px solid #450A0A22;
+  box-shadow:
+    6px 6px 0px #DC262622,
+    0 2px 16px 0 #DC262618;
+  transition: box-shadow 200ms ease-out, transform 200ms ease-out;
+}
+
+.clay-card:hover {
+  box-shadow:
+    8px 8px 0px #DC262630,
+    0 4px 24px 0 #DC262622;
+  transform: translateY(-2px);
+}
+
+.clay-btn {
+  border-radius: 14px;
+  border: 3px solid;
+  font-family: 'Karla', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: box-shadow 200ms ease-out, transform 200ms ease-out;
+  box-shadow: 4px 4px 0px currentColor;
+}
+
+.clay-btn:hover {
+  box-shadow: 6px 6px 0px currentColor;
+  transform: translateY(-1px);
+}
+
+.clay-btn:active {
+  box-shadow: 2px 2px 0px currentColor;
+  transform: translateY(1px);
+}
+
+.clay-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
