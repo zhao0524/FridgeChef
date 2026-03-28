@@ -27,3 +27,4 @@ export async function generateRecipe(ingredients, availableMinutes, wishlist = [
 
   return res.json();
 }
+
