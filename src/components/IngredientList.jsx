@@ -1,51 +1,104 @@
-export default function IngredientList({ ingredients, onConfirm, loading }) {
+import { useState, useRef } from "react";
+
+export default function IngredientList({ ingredients, onUpdateIngredients, onConfirm, loading }) {
+  const [input, setInput] = useState("");
+  const inputRef = useRef();
+
+  function addIngredient() {
+    const val = input.trim();
+    if (!val) return;
+    const lower = val.toLowerCase();
+    if (ingredients.map(i => i.toLowerCase()).includes(lower)) return;
+    onUpdateIngredients([...ingredients, val]);
+    setInput("");
+    inputRef.current?.focus();
+  }
+
+  function removeIngredient(item) {
+    onUpdateIngredients(ingredients.filter(i => i !== item));
+  }
+
+  function handleKey(e) {
+    if (e.key === "Enter") addIngredient();
+  }
+
   return (
     <div style={{ maxWidth: 560, margin: "0 auto" }}>
       <div className="clay-card" style={{ padding: "2rem" }}>
         <div style={{ marginBottom: "1.5rem" }}>
           <div className="flex items-center gap-3" style={{ marginBottom: "0.4rem" }}>
-            <div
-              style={{
-                width: 36, height: 36,
-                borderRadius: 10,
-                background: "linear-gradient(135deg, #FEE2E2, #FEF3C7)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
+            <div style={{
+              width: 36, height: 36, borderRadius: 10,
+              background: "linear-gradient(135deg, #FEE2E2, #FEF3C7)",
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+            }}>
               <LeafIcon />
             </div>
-            <h2 style={{ color: "#450A0A", fontSize: "1.3rem", margin: 0 }}>
-              Ingredients Found
-            </h2>
+            <h2 style={{ color: "#450A0A", fontSize: "1.3rem", margin: 0 }}>Ingredients Found</h2>
           </div>
           <p style={{ color: "#92400E", fontSize: "0.875rem", marginTop: "0.25rem" }}>
-            {ingredients.length} item{ingredients.length !== 1 ? "s" : ""} detected in your fridge
+            {ingredients.length} item{ingredients.length !== 1 ? "s" : ""} detected — add or remove before continuing
           </p>
         </div>
 
-        {/* Ingredient tags */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1.75rem" }}>
+        {/* Ingredient tags with delete */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1.25rem" }}>
           {ingredients.map((item, i) => (
-            <span
-              key={i}
-              style={{
-                padding: "0.35rem 0.85rem",
-                borderRadius: 99,
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                background: "rgba(220,38,38,0.07)",
-                color: "#991B1B",
-                border: "1px solid rgba(220,38,38,0.18)",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.3rem",
-              }}
-            >
+            <span key={i} style={{
+              padding: "0.35rem 0.5rem 0.35rem 0.85rem",
+              borderRadius: 99, fontSize: "0.875rem", fontWeight: 500,
+              background: "rgba(220,38,38,0.07)", color: "#991B1B",
+              border: "1px solid rgba(220,38,38,0.18)",
+              display: "inline-flex", alignItems: "center", gap: "0.4rem",
+            }}>
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#DC2626", flexShrink: 0 }} />
               {item}
+              <button
+                onClick={() => removeIngredient(item)}
+                style={{
+                  width: 16, height: 16, borderRadius: "50%",
+                  background: "rgba(220,38,38,0.15)", border: "none",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  cursor: "pointer", padding: 0, color: "#991B1B", flexShrink: 0,
+                }}
+              >
+                <svg width="8" height="8" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              </button>
             </span>
           ))}
+        </div>
+
+        {/* Add ingredient input */}
+        <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1.75rem" }}>
+          <input
+            ref={inputRef}
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={handleKey}
+            placeholder="Add an ingredient…"
+            style={{
+              flex: 1, padding: "0.6rem 0.9rem", borderRadius: 10,
+              border: "1.5px solid rgba(220,38,38,0.2)",
+              fontSize: "0.875rem", background: "rgba(255,255,255,0.8)",
+              color: "#450A0A", outline: "none",
+              fontFamily: "'Plus Jakarta Sans', sans-serif",
+            }}
+            onFocus={e => e.target.style.borderColor = "#DC2626"}
+            onBlur={e => e.target.style.borderColor = "rgba(220,38,38,0.2)"}
+          />
+          <button
+            onClick={addIngredient}
+            disabled={!input.trim()}
+            className="clay-btn"
+            style={{
+              padding: "0.6rem 1rem", fontSize: "0.875rem",
+              background: "#DC2626", color: "white", borderColor: "#991B1B", flexShrink: 0,
+            }}
+          >
+            Add
+          </button>
         </div>
 
         {/* Divider */}
@@ -58,32 +111,15 @@ export default function IngredientList({ ingredients, onConfirm, loading }) {
           </p>
           <button
             onClick={onConfirm}
-            disabled={loading}
+            disabled={loading || ingredients.length === 0}
             className="clay-btn"
             style={{
-              width: "100%",
-              padding: "0.85rem 1.5rem",
-              fontSize: "1rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.6rem",
-              background: "#DC2626",
-              color: "white",
-              borderColor: "#991B1B",
+              width: "100%", padding: "0.85rem 1.5rem", fontSize: "1rem",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem",
+              background: "#DC2626", color: "white", borderColor: "#991B1B",
             }}
           >
-            {loading ? (
-              <>
-                <SpinnerIcon />
-                Generating recipe…
-              </>
-            ) : (
-              <>
-                <ChefIcon />
-                Get My Recipe
-              </>
-            )}
+            {loading ? <><SpinnerIcon /> Generating recipe…</> : <><ChefIcon /> Get My Recipe</>}
           </button>
         </div>
       </div>
@@ -111,15 +147,7 @@ function ChefIcon() {
 
 function SpinnerIcon() {
   return (
-    <svg
-      width="16" height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      style={{ animation: "spin 0.8s linear infinite" }}
-    >
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ animation: "spin 0.8s linear infinite" }}>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
     </svg>

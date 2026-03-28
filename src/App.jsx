@@ -412,6 +412,7 @@ export default function App() {
           {step === "ingredients" && (
             <IngredientList
               ingredients={ingredients}
+              onUpdateIngredients={saveIngredients}
               onConfirm={handleGetRecipe}
               loading={loading}
             />
