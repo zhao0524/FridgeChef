@@ -122,7 +122,8 @@ export default function App() {
     setError(null);
     try {
       const { free_minutes } = await getAvailableTimeToday(accessToken);
-      const result = await generateRecipe(ingredients, free_minutes, wishlist);
+      const existingNames = recipe?.recipes?.map(r => r.recipe_name) ?? [];
+      const result = await generateRecipe(ingredients, free_minutes, wishlist, existingNames);
       saveRecipe(result);
       saveStep("recipe");
     } catch (e) {
@@ -426,6 +427,8 @@ export default function App() {
               onToggleGrocery={toggleGroceryItem}
               onRemoveGrocery={removeGroceryItem}
               userEmail={userEmail}
+              onRegenerate={handleGetRecipe}
+              regenerating={loading}
             />
           )}
         </main>

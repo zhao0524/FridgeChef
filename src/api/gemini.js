@@ -13,11 +13,11 @@ export async function detectIngredients(base64Image) {
   return res.json();
 }
 
-export async function generateRecipe(ingredients, availableMinutes, wishlist = []) {
+export async function generateRecipe(ingredients, availableMinutes, wishlist = [], excludeRecipes = []) {
   const res = await fetch("/api/generate-recipe", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ingredients, availableMinutes, wishlist }),
+    body: JSON.stringify({ ingredients, availableMinutes, wishlist, excludeRecipes }),
   });
 
   if (!res.ok) {

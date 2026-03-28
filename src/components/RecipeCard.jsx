@@ -7,7 +7,7 @@ const DIFFICULTY_COLORS = {
   Hard:   { bg: "rgba(220,38,38,0.1)",  text: "#991B1B", border: "rgba(220,38,38,0.25)" },
 };
 
-export default function RecipeCard({ recipe, onEmail, groceryList, onAddToGrocery, onToggleGrocery, onRemoveGrocery, userEmail }) {
+export default function RecipeCard({ recipe, onEmail, groceryList, onAddToGrocery, onToggleGrocery, onRemoveGrocery, userEmail, onRegenerate, regenerating }) {
   const [openIndex, setOpenIndex] = useState(null);
   const [emailGroceryState, setEmailGroceryState] = useState("idle");
 
@@ -38,13 +38,32 @@ export default function RecipeCard({ recipe, onEmail, groceryList, onAddToGrocer
 
         {/* Left — Recipes */}
         <div>
-          <div style={{ textAlign: "center", marginBottom: "1.25rem" }}>
-            <h2 style={{ color: "#450A0A", fontSize: "1.4rem", marginBottom: "0.3rem", fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}>
-              Here's what you can make
-            </h2>
-            <p style={{ color: "#92400E", fontSize: "0.875rem" }}>
-              {recipes.length} recipes · tap any to expand
-            </p>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem", flexWrap: "wrap", gap: "0.75rem" }}>
+            <div>
+              <h2 style={{ color: "#450A0A", fontSize: "1.4rem", marginBottom: "0.3rem", fontFamily: "'Cormorant Garamond', serif", fontWeight: 600 }}>
+                Here's what you can make
+              </h2>
+              <p style={{ color: "#92400E", fontSize: "0.875rem" }}>
+                {recipes.length} recipes · tap any to expand
+              </p>
+            </div>
+            <button
+              onClick={onRegenerate}
+              disabled={regenerating}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "0.5rem",
+                padding: "0.5rem 1rem", borderRadius: 10,
+                fontSize: "0.82rem", fontWeight: 600,
+                background: "rgba(220,38,38,0.08)", color: "#DC2626",
+                border: "1px solid rgba(220,38,38,0.2)",
+                cursor: regenerating ? "not-allowed" : "pointer",
+                opacity: regenerating ? 0.6 : 1,
+                transition: "all 0.2s ease",
+              }}
+            >
+              <RefreshIcon spinning={regenerating} />
+              {regenerating ? "Regenerating…" : "Regenerate"}
+            </button>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
             {recipes.map((r, i) => (
@@ -512,4 +531,7 @@ function StarIcon() {
 
 function SpinnerIcon() {
   return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ animation: "spin 0.8s linear infinite" }}><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>;
+}
+function RefreshIcon({ spinning }) {
+  return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ animation: spinning ? "spin 0.8s linear infinite" : "none" }}><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>;
 }

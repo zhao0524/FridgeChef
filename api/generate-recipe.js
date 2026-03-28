@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { ingredients, availableMinutes, wishlist = [] } = req.body;
+  const { ingredients, availableMinutes, wishlist = [], excludeRecipes = [] } = req.body;
   if (!ingredients?.length) {
     return res.status(400).json({ error: "Missing ingredients" });
   }
@@ -36,6 +36,10 @@ export default async function handler(req, res) {
     ? `The user also has a wish list of dishes they'd love to make: ${wishlist.join(", ")}. Try to include at least one recipe inspired by these. For each wish list dish, also include a shopping_suggestions entry listing what extra ingredients they'd need to buy.`
     : "";
 
+  const excludeSection = excludeRecipes.length > 0
+    ? `IMPORTANT: Do NOT suggest any of these recipes that were already shown: ${excludeRecipes.join(", ")}. Suggest completely different recipes.`
+    : "";
+
   const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -47,6 +51,7 @@ export default async function handler(req, res) {
               text: `I have these ingredients available: ${ingredients.join(", ")}.
 ${timeNote}
 ${wishlistSection}
+${excludeSection}
 
 Suggest exactly 5 different recipes. Each recipe should use ONLY a subset of my ingredients — not all are required. Vary the difficulty, cooking style, and cuisine.
 
