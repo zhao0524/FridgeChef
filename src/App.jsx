@@ -176,8 +176,8 @@ export default function App() {
             height: 64, display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: "#DC2626", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <FridgeIcon />
+              <div style={{ width: 36, height: 36, borderRadius: 10, overflow: "hidden", flexShrink: 0 }}>
+                <img src="/logo.png" alt="FridgeChef" style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.4)", transformOrigin: "center" }} />
               </div>
               <span style={{ fontFamily: "'Playfair Display SC', serif", fontSize: "1.2rem", fontWeight: 700, color: "#DC2626" }}>
                 FridgeChef
@@ -339,6 +339,9 @@ function LoginView({ onLogin }) {
 
       {/* Hero */}
       <div style={{ textAlign: "center", padding: "3rem 1rem 2.5rem" }}>
+        <div style={{ width: 90, height: 90, borderRadius: 22, overflow: "hidden", marginBottom: "1.5rem", boxShadow: "0 4px 20px rgba(220,38,38,0.2)", display: "inline-block" }}>
+          <img src="/logo.png" alt="FridgeChef" style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.4)", transformOrigin: "center" }} />
+        </div>
         <div style={{
           display: "inline-flex", alignItems: "center", gap: "0.5rem",
           padding: "0.35rem 1rem", borderRadius: 99, marginBottom: "1.5rem",
