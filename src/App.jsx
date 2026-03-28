@@ -335,132 +335,115 @@ function LoginView({ onLogin }) {
   ];
 
   return (
-    <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+    <div>
 
-      {/* Hero */}
-      <div style={{ textAlign: "center", padding: "3rem 1rem 2.5rem" }}>
-        <div style={{ width: 90, height: 90, borderRadius: 22, overflow: "hidden", marginBottom: "1.5rem", boxShadow: "0 4px 20px rgba(220,38,38,0.2)", display: "inline-block" }}>
-          <img src="/logo.png" alt="FridgeChef" style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.4)", transformOrigin: "center" }} />
-        </div>
-        <div style={{
-          display: "inline-flex", alignItems: "center", gap: "0.5rem",
-          padding: "0.35rem 1rem", borderRadius: 99, marginBottom: "1.5rem",
-          background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.2)",
-        }}>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#DC2626", display: "inline-block" }} />
-          <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#DC2626" }}>AI-powered kitchen assistant</span>
-        </div>
-
-        <h1 style={{
-          fontSize: "clamp(2.4rem, 6vw, 3.75rem)",
-          fontWeight: 800,
-          color: "#1C0A00",
-          lineHeight: 1.1,
-          marginBottom: "1.25rem",
-          letterSpacing: "-0.02em",
-        }}>
-          Stop wasting food.<br />
-          <span style={{ color: "#DC2626" }}>Start cooking smarter.</span>
-        </h1>
-
-        <p style={{
-          fontSize: "1.1rem", color: "#78350F", lineHeight: 1.7,
-          maxWidth: 540, margin: "0 auto 2.5rem",
-          fontWeight: 400,
-        }}>
-          Snap a photo of your fridge. Get personalised recipes in seconds.
-          No more "what's for dinner?" — ever again.
-        </p>
-
-        <button
-          onClick={onLogin}
-          className="clay-btn"
-          style={{
-            display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.75rem",
-            padding: "0.9rem 2rem", fontSize: "1rem", fontWeight: 700,
-            background: "white", color: "#1C0A00", borderColor: "rgba(220,38,38,0.3)",
-          }}
-        >
-          <GoogleIcon />
-          Continue with Google — it's free
-        </button>
-
-        <p style={{ fontSize: "0.78rem", color: "#92400E", marginTop: "0.75rem", opacity: 0.7 }}>
-          No credit card required · Takes 10 seconds
-        </p>
-      </div>
-
-      {/* Stats row */}
+      {/* Full-viewport hero */}
       <div style={{
-        display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px",
-        background: "rgba(220,38,38,0.1)", borderRadius: 16, overflow: "hidden",
-        margin: "0 0 2.5rem",
-        border: "1px solid rgba(220,38,38,0.1)",
+        minHeight: "calc(100vh - 64px)",
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
+        textAlign: "center", padding: "3rem 1.5rem",
       }}>
-        {stats.map((s, i) => (
-          <div key={i} style={{
-            background: "rgba(255,255,255,0.7)", padding: "1.75rem 1.5rem",
-            textAlign: "center",
-            backdropFilter: "blur(8px)",
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: "0.5rem",
+            padding: "0.35rem 1rem", borderRadius: 99, marginBottom: "1.75rem",
+            background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.2)",
           }}>
-            <p style={{ fontSize: "2.25rem", fontWeight: 800, color: "#DC2626", lineHeight: 1, marginBottom: "0.4rem", letterSpacing: "-0.02em" }}>
-              {s.value}
-            </p>
-            <p style={{ fontSize: "0.82rem", color: "#450A0A", fontWeight: 500, lineHeight: 1.45, marginBottom: "0.3rem" }}>
-              {s.label}
-            </p>
-            <p style={{ fontSize: "0.7rem", color: "#92400E", opacity: 0.6, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-              {s.source}
-            </p>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#DC2626", display: "inline-block" }} />
+            <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#DC2626" }}>AI-powered kitchen assistant</span>
           </div>
-        ))}
+
+          <h1 style={{
+            fontSize: "clamp(2.4rem, 6vw, 3.75rem)",
+            fontWeight: 800, color: "#1C0A00",
+            lineHeight: 1.1, marginBottom: "1.25rem",
+            letterSpacing: "-0.02em",
+          }}>
+            Stop wasting food.<br />
+            <span style={{ color: "#DC2626" }}>Start cooking smarter.</span>
+          </h1>
+
+          <p style={{ fontSize: "1.05rem", color: "#78350F", lineHeight: 1.75, marginBottom: "2.5rem", maxWidth: 500 }}>
+            Snap a photo of your fridge. Get personalised recipes in seconds.
+            No more "what's for dinner?" — ever again.
+          </p>
+
+          <button
+            onClick={onLogin}
+            className="clay-btn"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.75rem",
+              padding: "0.9rem 2rem", fontSize: "1rem", fontWeight: 700,
+              background: "#DC2626", color: "white", borderColor: "#991B1B",
+            }}
+          >
+            <GoogleIcon />
+            Continue with Google — it's free
+          </button>
+          <p style={{ fontSize: "0.78rem", color: "#92400E", marginTop: "0.85rem", opacity: 0.7 }}>
+            No credit card required · Takes 10 seconds
+          </p>
       </div>
 
-      {/* Feature cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "1rem", marginBottom: "2.5rem" }}>
-        {features.map((f, i) => (
-          <div key={i} className="clay-card" style={{ padding: "1.4rem 1.5rem" }}>
-            <div style={{
-              width: 40, height: 40, borderRadius: 12, marginBottom: "0.9rem",
-              background: i % 2 === 0 ? "linear-gradient(135deg, #FEE2E2, #FEF3C7)" : "linear-gradient(135deg, #FEF3C7, #FEE2E2)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-              {f.icon}
+      {/* Scroll-down content */}
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "4rem 1.5rem" }}>
+
+        {/* Stats row */}
+        <div style={{
+          display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px",
+          background: "rgba(220,38,38,0.1)", borderRadius: 16, overflow: "hidden",
+          marginBottom: "2.5rem", border: "1px solid rgba(220,38,38,0.1)",
+        }}>
+          {stats.map((s, i) => (
+            <div key={i} style={{ background: "rgba(255,255,255,0.7)", padding: "1.75rem 1.5rem", textAlign: "center" }}>
+              <p style={{ fontSize: "2.25rem", fontWeight: 800, color: "#DC2626", lineHeight: 1, marginBottom: "0.4rem", letterSpacing: "-0.02em" }}>{s.value}</p>
+              <p style={{ fontSize: "0.82rem", color: "#450A0A", fontWeight: 500, lineHeight: 1.45, marginBottom: "0.3rem" }}>{s.label}</p>
+              <p style={{ fontSize: "0.7rem", color: "#92400E", opacity: 0.6, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>{s.source}</p>
             </div>
-            <p style={{ fontWeight: 700, fontSize: "0.9rem", color: "#1C0A00", marginBottom: "0.35rem" }}>{f.title}</p>
-            <p style={{ fontSize: "0.8rem", color: "#78350F", lineHeight: 1.55 }}>{f.desc}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Bottom CTA strip */}
-      <div className="clay-card" style={{
-        padding: "1.75rem 2rem",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        flexWrap: "wrap", gap: "1rem",
-        background: "linear-gradient(135deg, rgba(220,38,38,0.04), rgba(202,138,4,0.04))",
-      }}>
-        <div>
-          <p style={{ fontWeight: 700, fontSize: "1rem", color: "#1C0A00", marginBottom: "0.2rem" }}>
-            Ready to open your fridge?
-          </p>
-          <p style={{ fontSize: "0.85rem", color: "#78350F" }}>
-            Join thousands of households cooking smarter every day.
-          </p>
+          ))}
         </div>
-        <button
-          onClick={onLogin}
-          className="clay-btn"
-          style={{
-            display: "inline-flex", alignItems: "center", gap: "0.65rem",
-            padding: "0.75rem 1.5rem", fontSize: "0.9rem", fontWeight: 700,
-            background: "#DC2626", color: "white", borderColor: "#991B1B",
-            flexShrink: 0,
-          }}
-        >
-          <GoogleIcon />
-          Sign in with Google
-        </button>
+
+        {/* Feature cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: "1rem", marginBottom: "2.5rem" }}>
+          {features.map((f, i) => (
+            <div key={i} className="clay-card" style={{ padding: "1.4rem 1.5rem" }}>
+              <div style={{
+                width: 40, height: 40, borderRadius: 12, marginBottom: "0.9rem",
+                background: i % 2 === 0 ? "linear-gradient(135deg, #FEE2E2, #FEF3C7)" : "linear-gradient(135deg, #FEF3C7, #FEE2E2)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                {f.icon}
+              </div>
+              <p style={{ fontWeight: 700, fontSize: "0.9rem", color: "#1C0A00", marginBottom: "0.35rem" }}>{f.title}</p>
+              <p style={{ fontSize: "0.8rem", color: "#78350F", lineHeight: 1.55 }}>{f.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="clay-card" style={{
+          padding: "1.75rem 2rem",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          flexWrap: "wrap", gap: "1rem",
+          background: "linear-gradient(135deg, rgba(220,38,38,0.04), rgba(202,138,4,0.04))",
+        }}>
+          <div>
+            <p style={{ fontWeight: 700, fontSize: "1rem", color: "#1C0A00", marginBottom: "0.2rem" }}>Ready to open your fridge?</p>
+            <p style={{ fontSize: "0.85rem", color: "#78350F" }}>Join thousands of households cooking smarter every day.</p>
+          </div>
+          <button
+            onClick={onLogin}
+            className="clay-btn"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.65rem",
+              padding: "0.75rem 1.5rem", fontSize: "0.9rem", fontWeight: 700,
+              background: "#DC2626", color: "white", borderColor: "#991B1B", flexShrink: 0,
+            }}
+          >
+            <GoogleIcon />
+            Sign in with Google
+          </button>
+        </div>
       </div>
 
     </div>
