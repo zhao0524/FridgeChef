@@ -40,7 +40,7 @@ export default function App() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [userEmail, setUserEmail] = useState(null);
+  const [userEmail, setUserEmail] = useState(() => sessionStorage.getItem("fridgechef_email") || null);
 
   function saveStep(s) {
     setStep(s);
@@ -78,6 +78,7 @@ export default function App() {
       });
       const info = await res.json();
       setUserEmail(info.email);
+      sessionStorage.setItem("fridgechef_email", info.email);
       setStep("upload");
     },
     onError: () => setError("Google sign-in failed. Please try again."),
@@ -87,6 +88,7 @@ export default function App() {
     sessionStorage.clear();
     ["fridgechef_step","fridgechef_ingredients","fridgechef_recipe",
      "fridgechef_wishlist","fridgechef_grocery"].forEach(k => localStorage.removeItem(k));
+    sessionStorage.removeItem("fridgechef_email");
     setAccessToken(null);
     setUserEmail(null);
     setIngredients([]);
