@@ -65,11 +65,15 @@ Use exactly this shape:
   return extractJSON(text);
 }
 
-export async function generateRecipe(ingredients, availableMinutes) {
-  const timeContext =
+export async function generateRecipe(ingredients, availableMinutes, wishlist = []) {
+  const timeNote =
     availableMinutes < 30
-      ? "The user is busy today. Suggest a quick recipe under 20 minutes."
-      : "The user has free time today. Suggest a more elaborate, satisfying recipe.";
+      ? "The user is short on time — prioritise recipes under 20 minutes."
+      : "The user has free time — feel free to suggest more involved recipes too.";
+
+  const wishlistSection = wishlist.length > 0
+    ? `The user also has a wish list of dishes they'd love to make: ${wishlist.join(", ")}. Try to include at least one recipe inspired by these. For each wish list dish, also include a shopping_suggestions entry listing what extra ingredients they'd need to buy.`
+    : "";
 
   const response = await fetch(`${GEMINI_API_URL}?key=${API_KEY}`, {
     method: "POST",
@@ -79,18 +83,32 @@ export async function generateRecipe(ingredients, availableMinutes) {
         {
           parts: [
             {
-              text: `I have these ingredients: ${ingredients.join(", ")}.
-              ${timeContext}
+              text: `I have these ingredients available: ${ingredients.join(", ")}.
+${timeNote}
+${wishlistSection}
 
-              Respond ONLY in this JSON format, no extra text, no markdown:
-              {
-                "recipe_name": "...",
-                "prep_time": "... mins",
-                "ingredients_used": ["..."],
-                "missing_ingredients": ["..."],
-                "steps": ["step 1", "step 2"],
-                "tips": "optional cooking tip"
-              }`,
+Suggest exactly 5 different recipes. Each recipe should use ONLY a subset of my ingredients — not all are required. Vary the difficulty, cooking style, and cuisine.
+
+Respond ONLY with a raw JSON object — no markdown, no code fences, no extra text. Use exactly this shape:
+{
+  "recipes": [
+    {
+      "recipe_name": "...",
+      "prep_time": "... mins",
+      "difficulty": "Easy",
+      "ingredients_used": ["..."],
+      "missing_ingredients": ["..."],
+      "steps": ["step 1", "step 2"],
+      "tips": "optional cooking tip"
+    }
+  ],
+  "shopping_suggestions": [
+    {
+      "dish": "wish list dish name",
+      "needs": ["ingredient1", "ingredient2"]
+    }
+  ]
+}`,
             },
           ],
         },
@@ -99,6 +117,8 @@ export async function generateRecipe(ingredients, availableMinutes) {
   });
 
   if (!response.ok) {
+    const body = await response.text();
+    console.error("Gemini API error", response.status, body);
     throw new Error(`Gemini API error: ${response.status}`);
   }
 

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Karla:wght@300;400;500;600;700&family=Playfair+Display+SC:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display+SC:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -16,7 +16,7 @@
 body {
   background: linear-gradient(135deg, #fff5f0 0%, #fffbeb 100%);
   color: var(--color-text);
-  font-family: 'Karla', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 16px;
   line-height: 1.6;
   margin: 0;
@@ -29,7 +29,7 @@ body {
 }
 
 h1, h2, h3 {
-  font-family: 'Playfair Display SC', serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .clay-card {
@@ -52,7 +52,7 @@ h1, h2, h3 {
 .clay-btn {
   border-radius: 14px;
   border: 3px solid;
-  font-family: 'Karla', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 700;
   cursor: pointer;
   transition: box-shadow 200ms ease-out, transform 200ms ease-out;
