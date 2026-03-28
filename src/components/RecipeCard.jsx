@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { emailGroceryList } from "../api/gmail";
 
 const DIFFICULTY_COLORS = {
   Easy:   { bg: "rgba(22,163,74,0.1)",  text: "#166534", border: "rgba(22,163,74,0.25)" },
@@ -6,8 +7,21 @@ const DIFFICULTY_COLORS = {
   Hard:   { bg: "rgba(220,38,38,0.1)",  text: "#991B1B", border: "rgba(220,38,38,0.25)" },
 };
 
-export default function RecipeCard({ recipe, onEmail, groceryList, onAddToGrocery, onToggleGrocery, onRemoveGrocery }) {
+export default function RecipeCard({ recipe, onEmail, groceryList, onAddToGrocery, onToggleGrocery, onRemoveGrocery, userEmail }) {
   const [openIndex, setOpenIndex] = useState(null);
+  const [emailGroceryState, setEmailGroceryState] = useState("idle");
+
+  async function handleEmailGrocery() {
+    setEmailGroceryState("sending");
+    try {
+      await emailGroceryList(groceryList, userEmail);
+      setEmailGroceryState("sent");
+    } catch (e) {
+      console.error(e);
+      setEmailGroceryState("idle");
+      alert("Failed to send email. Please try again.");
+    }
+  }
 
   const recipes = recipe.recipes ?? [recipe];
   const shoppingSuggestions = recipe.shopping_suggestions ?? [];
@@ -104,30 +118,50 @@ export default function RecipeCard({ recipe, onEmail, groceryList, onAddToGrocer
                 <p style={{ color: "#92400E", fontSize: "0.78rem", opacity: 0.7 }}>Expand a recipe and click "Add to grocery list" for missing ingredients</p>
               </div>
             ) : (
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-                {groceryList.map((item) => (
-                  <li key={item.name} style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "0.5rem 0.6rem", borderRadius: 8, background: item.checked ? "rgba(22,163,74,0.05)" : "rgba(255,255,255,0.6)", border: `1px solid ${item.checked ? "rgba(22,163,74,0.2)" : "rgba(220,38,38,0.08)"}` }}>
-                    <button
-                      onClick={() => onToggleGrocery(item.name)}
-                      style={{
-                        width: 20, height: 20, borderRadius: 6, flexShrink: 0,
-                        border: `2px solid ${item.checked ? "#16A34A" : "rgba(220,38,38,0.3)"}`,
-                        background: item.checked ? "#16A34A" : "white",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        cursor: "pointer", padding: 0, transition: "all 0.15s",
-                      }}
-                    >
-                      {item.checked && <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>}
-                    </button>
-                    <span style={{ flex: 1, fontSize: "0.875rem", color: item.checked ? "#6B7280" : "#450A0A", textDecoration: item.checked ? "line-through" : "none", transition: "all 0.15s" }}>
-                      {item.name}
-                    </span>
-                    <button onClick={() => onRemoveGrocery(item.name)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.1rem", color: "#9CA3AF", display: "flex", alignItems: "center" }}>
-                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              <>
+                <ul style={{ listStyle: "none", padding: 0, margin: "0 0 1rem", display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                  {groceryList.map((item) => (
+                    <li key={item.name} style={{ display: "flex", alignItems: "center", gap: "0.6rem", padding: "0.5rem 0.6rem", borderRadius: 8, background: item.checked ? "rgba(22,163,74,0.05)" : "rgba(255,255,255,0.6)", border: `1px solid ${item.checked ? "rgba(22,163,74,0.2)" : "rgba(220,38,38,0.08)"}` }}>
+                      <button
+                        onClick={() => onToggleGrocery(item.name)}
+                        style={{
+                          width: 20, height: 20, borderRadius: 6, flexShrink: 0,
+                          border: `2px solid ${item.checked ? "#16A34A" : "rgba(220,38,38,0.3)"}`,
+                          background: item.checked ? "#16A34A" : "white",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          cursor: "pointer", padding: 0, transition: "all 0.15s",
+                        }}
+                      >
+                        {item.checked && <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                      </button>
+                      <span style={{ flex: 1, fontSize: "0.875rem", color: item.checked ? "#6B7280" : "#450A0A", textDecoration: item.checked ? "line-through" : "none", transition: "all 0.15s" }}>
+                        {item.name}
+                      </span>
+                      <button onClick={() => onRemoveGrocery(item.name)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.1rem", color: "#9CA3AF", display: "flex", alignItems: "center" }}>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={handleEmailGrocery}
+                  disabled={emailGroceryState !== "idle" || !userEmail}
+                  className="clay-btn"
+                  style={{
+                    width: "100%", padding: "0.7rem",
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
+                    fontSize: "0.875rem", fontWeight: 700,
+                    background: emailGroceryState === "sent" ? "#16A34A" : "#DC2626",
+                    color: "white",
+                    borderColor: emailGroceryState === "sent" ? "#15803D" : "#991B1B",
+                  }}
+                >
+                  {emailGroceryState === "sent"    ? <><CheckCircleIcon color="white" /> List sent to your email!</> :
+                   emailGroceryState === "sending" ? <><SpinnerIcon /> Sending…</> :
+                   <><MailIcon /> Email my grocery list</>}
+                </button>
+              </>
             )}
           </div>
         </div>

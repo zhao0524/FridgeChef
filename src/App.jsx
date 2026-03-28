@@ -309,6 +309,7 @@ export default function App() {
               onAddToGrocery={addToGroceryList}
               onToggleGrocery={toggleGroceryItem}
               onRemoveGrocery={removeGroceryItem}
+              userEmail={userEmail}
             />
           )}
         </main>
